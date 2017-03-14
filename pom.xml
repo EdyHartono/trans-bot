@@ -21,6 +21,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<line-version>1.6.0</line-version>
+		<apache-commons-version>3.0</apache-commons-version>
+		<google-map-version>0.1.17</google-map-version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -56,6 +58,16 @@
 			<groupId>com.linecorp.bot</groupId>
 			<artifactId>line-bot-api-client</artifactId>
 			<version>${line-version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>${apache-commons-version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.google.maps</groupId>
+    		<artifactId>google-maps-services</artifactId>
+		    <version>${google-map-version}</version>
 		</dependency>
 	</dependencies>
 
