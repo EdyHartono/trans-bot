@@ -1,5 +1,8 @@
 package org.transbot;
 
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.DirectionsRoute;
+import com.google.maps.model.PlacesSearchResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,8 +18,7 @@ public class WebhookController {
 	private MessageConverterService messageConverterService;
 	
 	@RequestMapping("/")
-	public AutocompletePrediction[] test(@RequestParam String message){
-		return messageConverterService.convertMessageToRoute(message);
+	public DirectionsResult  test(){
+		return messageConverterService.convertMessageToRoute("binus-tanah abang");
 	}
-	
 }

@@ -1,8 +1,11 @@
 package org.transbot;
 
+import com.google.maps.GeoApiContext;
+import com.google.maps.TextSearchRequest;
 import org.hibernate.validator.internal.util.logging.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.linecorp.bot.client.LineMessagingClient;
@@ -14,6 +17,8 @@ import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
 @LineMessageHandler
 @SpringBootApplication
