@@ -23,13 +23,18 @@
 		<line-version>1.6.0</line-version>
 		<apache-commons-version>3.0</apache-commons-version>
 		<google-map-version>0.1.17</google-map-version>
+		<postgresql-version>9.4-1206-jdbc42</postgresql-version>
+		<jpa-api-hibernate-version>1.0.1.Final</jpa-api-hibernate-version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -68,6 +73,22 @@
 		    <groupId>com.google.maps</groupId>
     		<artifactId>google-maps-services</artifactId>
 		    <version>${google-map-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.1-api</artifactId>
+			<version>1.0.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>net.karneim</groupId>
+			<artifactId>pojobuilder</artifactId>
+			<version>3.5.0</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
