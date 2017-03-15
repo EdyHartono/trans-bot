@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.transbot.service.APIUtilsService;
 import org.transbot.service.MessageConverterService;
-import org.apache.commons.lang3.StringUtils;
 
 @Service
 public class MessageConverterServiceImpl implements MessageConverterService{
@@ -24,32 +23,35 @@ public class MessageConverterServiceImpl implements MessageConverterService{
 
 		try{
 			GeoApiContext geoApiContext = new GeoApiContext().setApiKey("AIzaSyCo3aUKGX_8Sus5P_ACSdzqqUhvYqyE4Sg");
-			AutocompletePrediction[] autocompleteStartPointPredictions=PlacesApi.placeAutocomplete(geoApiContext,startPoint).location(jakartaLatLng).await();
-			AutocompletePrediction[] autocompleteEndPointPredictions=PlacesApi.placeAutocomplete(geoApiContext,destination).location(jakartaLatLng).await();
+
+			AutocompletePrediction[] autocompleteStartPointPredictions = PlacesApi.placeAutocomplete(
+					geoApiContext,
+					startPoint
+			).location(jakartaLatLng).await();
+
+			AutocompletePrediction[] autocompleteEndPointPredictions=PlacesApi.placeAutocomplete(
+					geoApiContext,
+					destination
+			).location(jakartaLatLng).await();
 
 			//buat dapatin geo locationnya
 			//disini kita kirim si pilihan user aja
-			GeocodingResult[] geocodingStartPointResult= GeocodingApi.geocode(geoApiContext,autocompleteStartPointPredictions[1].description).await();
+			GeocodingResult[] geocodingStartPointResult= GeocodingApi.geocode(
+					geoApiContext,
+					autocompleteStartPointPredictions[1].description
+			).await();
 			double startLat=geocodingStartPointResult[0].geometry.location.lat;
 			double startLng=geocodingStartPointResult[0].geometry.location.lng;
 
 
-//			for(AutocompletePrediction autocompletePrediction : autocompleteEndPointPredictions)
-//			{
-//					System.out.print(autocompletePrediction.description);
-//			}
-			//System.out.print(startLat+" "+startLng);
-
 			GeocodingResult[] geocodingEndPointResult= GeocodingApi.geocode(geoApiContext,autocompleteEndPointPredictions[0].description).await();
-
+			System.out.println(geocodingStartPointResult[0].formattedAddress);
+			System.out.println(geocodingEndPointResult[0].formattedAddress);
 			DirectionsResult directionsResult= DirectionsApi.getDirections(
 					geoApiContext,
 					geocodingStartPointResult[0].formattedAddress,
 					geocodingEndPointResult[0].formattedAddress
-			).mode(TravelMode.TRANSIT).transitMode(TransitMode.BUS).await();
-
-			System.out.print(directionsResult);
-			System.out.print(directionsResult.routes);
+			).mode(TravelMode.TRANSIT).transitMode(TransitMode.BUS).language("ID").await();
 			return directionsResult;
 
 //			return autocompletePredictions;
