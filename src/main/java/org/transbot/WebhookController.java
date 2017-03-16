@@ -5,9 +5,14 @@ import com.google.maps.model.*;
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.client.LineMessagingServiceBuilder;
 import com.linecorp.bot.model.PushMessage;
+import com.linecorp.bot.model.ReplyMessage;
+import com.linecorp.bot.model.event.MessageEvent;
+import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.model.response.BotApiResponse;
+import com.linecorp.bot.spring.boot.annotation.EventMapping;
+import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +24,7 @@ import org.transbot.repository.StateRepository;
 import org.transbot.service.MessageConverterService;
 import retrofit2.Response;
 
-@RestController
+@LineMessageHandler
 public class WebhookController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TransBotApplication.class);
@@ -31,26 +36,29 @@ public class WebhookController {
 
 	@Autowired
 	private MessageConverterService messageConverterService;
+	
+//	@RequestMapping("/")
+//	public void  test(){
+////		String to=event.getSource().getUserId();
+//
+//		String to = "U3df0ca20b02fa0e3583b6b59fe29990e";
+//		try {
+//			String value= messageConverterService.convertMessageToRoute(to,"binus-mangga dua mall");
+//			Message message = new TextMessage(value);
+//			PushMessage pushMessage = new PushMessage(to, message);
+//			lineMessagingClient.pushMessage(pushMessage);
+//		}
+//		catch (Exception e)
+//		{
+//			LOG.error(e.getMessage(),e);
+//		}
+//	//	return messageConverterService.convertMessageToRoute("binus-tanah abang");
+//	}
 
-	@Autowired
-	private StateRepository stateRepository;
-
-	@RequestMapping("/")
-	public void  test(){
-//		String to=event.getSource().getUserId();
-
-		String to = "U3df0ca20b02fa0e3583b6b59fe29990e";
-		try {
-			String value= messageConverterService.convertMessageToRoute(to,"5-6");
-			Message message = new TextMessage(value);
-			PushMessage pushMessage = new PushMessage(to, message);
-			lineMessagingClient.pushMessage(pushMessage);
-		}
-		catch (Exception e)
-		{
-			LOG.error(e.getMessage(),e);
-		}
-	//	return messageConverterService.convertMessageToRoute("binus-tanah abang");
+	@EventMapping
+	public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
+		String value= messageConverterService.convertMessageToRoute(event.getSource().getUserId(), event.getMessage().getText());
+		return new TextMessage(value);
 	}
 
 }
