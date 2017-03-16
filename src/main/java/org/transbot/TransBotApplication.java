@@ -16,6 +16,7 @@ import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.transbot.service.MessageConverterService;
 
@@ -38,11 +39,11 @@ public class TransBotApplication {
 	private void sendMessage(Event event)
 	{
 		//String to=event.getSource().getUserId();
-		String to="edy_hartono";
+		String to="U3df0ca20b02fa0e3583b6b59fe29990e";
 
 		//Messages messages= Messages.MESSAGES;
 		try {
-			String value = objectMapper.writeValueAsString(messageConverterService.convertMessageToRoute("binus-mangga dua mall"));
+			String value = objectMapper.writeValueAsString(messageConverterService.convertMessageToRoute(to,"binus-mangga dua mall"));
 			Message message = new TextMessage(value);
 			PushMessage pushMessage = new PushMessage(to, message);
 			lineMessagingClient.pushMessage(pushMessage);

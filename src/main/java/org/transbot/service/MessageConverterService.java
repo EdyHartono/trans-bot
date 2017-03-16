@@ -6,5 +6,5 @@ import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.PlacesSearchResponse;
 
 public interface MessageConverterService {
-	public DirectionsResult  convertMessageToRoute(String message);
+	String  convertMessageToRoute(String userId,String message);
 }
