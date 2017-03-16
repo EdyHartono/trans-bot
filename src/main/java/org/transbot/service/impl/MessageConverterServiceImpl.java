@@ -115,6 +115,7 @@ public class MessageConverterServiceImpl implements MessageConverterService {
                            value += new StringBuilder().appendCodePoint(0x0001F68F).toString()+directionsStep.transitDetails.arrivalStop.name + "\n";
                        }
                    }
+                   stateRepository.deleteByUserId(userId);
                }
            }catch(Exception e)
            {
