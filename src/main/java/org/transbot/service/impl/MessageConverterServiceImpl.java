@@ -1,6 +1,8 @@
 package org.transbot.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 import com.google.maps.*;
 import com.google.maps.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,26 +64,40 @@ public class MessageConverterServiceImpl implements MessageConverterService {
         } else {
            try
            {
-               if(!Character.isDigit(startPoint.charAt(0))&&!Character.isDigit(destination.charAt(0)))
+               char startPointAt = startPoint.charAt(0);
+               char destinationAt = destination.charAt(0);
+               if(!Character.isDigit(startPointAt)&&!Character.isDigit(destinationAt))
                {
                    value+="Format input salah";
                }
-               else
-               {
+               else {
+
                    //TODO cari ke dalam databasenya
                    //jangan lupa ambil yang descriptionnya aja ya
                    //cari ke dalam repository
-                   String startPointFinal;
-                   String destinationFinal;
+                   int addressSuggestionStartPoint = Character.getNumericValue(startPointAt);
+                   int addressSuggestionEndPoint = Character.getNumericValue(destinationAt);
+                   if(addressSuggestionStartPoint<1 || addressSuggestionStartPoint>3 ) {
+                       value = "Input StartPoint harus antara 1 sampai 3";
+                       if(addressSuggestionEndPoint < 1 || addressSuggestionEndPoint > 3){
+                           value = "Input Destination harus 1 sampai 3";
+                       }
+                       return value;
+                   }
+                   String address = state.getAddress();
+                   AddressSuggestion addressSuggestion = objectMapper.readValue(address, AddressSuggestion.class);
+
+                   String startPointFinal = addressSuggestion.getStartSuggestionList().get(addressSuggestionStartPoint-1).description;
+                   String destinationFinal = addressSuggestion.getEndSuggestionList().get(addressSuggestionEndPoint-1).description;
 
                    //buat dapatin geo locationnya
                    //disini kita kirim si pilihan user aja
                    GeocodingResult[] geocodingStartPointResult= GeocodingApi.geocode(
                            geoApiContext,
-                          startPoint
+                           startPointFinal
                    ).await();
 
-                   GeocodingResult[] geocodingEndPointResult= GeocodingApi.geocode(geoApiContext,destination).await();
+                   GeocodingResult[] geocodingEndPointResult= GeocodingApi.geocode(geoApiContext,destinationFinal).await();
                    DirectionsResult directionsResult= DirectionsApi.getDirections(
                            geoApiContext,
                            geocodingStartPointResult[0].formattedAddress,
@@ -95,7 +111,6 @@ public class MessageConverterServiceImpl implements MessageConverterService {
                    for (DirectionsStep directionsStep : directionsSteps){
                        value += String.format("%d.%s\n",step++, directionsStep.htmlInstructions);
                        if(directionsStep.travelMode == TravelMode.TRANSIT){
-
                            value +=new StringBuilder().appendCodePoint(0x0001F68B).toString()+directionsStep.transitDetails.departureStop.name+ "\n";
                            value += new StringBuilder().appendCodePoint(0x0001F68F).toString()+directionsStep.transitDetails.arrivalStop.name + "\n";
                        }
@@ -106,8 +121,7 @@ public class MessageConverterServiceImpl implements MessageConverterService {
                //TODO error log
                value+="Format input salah";
            }
-//			return autocompletePredictions;
-            return null;
+
         }
     return value;
         //results[0].geometry.location.lat(), results[0].geometry.location.lng()

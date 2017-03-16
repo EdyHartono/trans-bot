@@ -55,15 +55,14 @@ public class AddressSuggestionServiceImpl  implements AddressSugggestionService{
             autocompleteEndPredictions.add(endPointPredictions[1]);
             autocompleteEndPredictions.add(endPointPredictions[2]);
 
-
             addressSuggestion.setStartSuggestionList(autocompleteStartPredictions);
             addressSuggestion.setEndSuggestionList(autocompleteEndPredictions);
             String address = objectMapper.writeValueAsString(addressSuggestion);
 
-
-            state.setAddress(address);
+            System.out.print("ini alamat"+address);
             state.setState((short)1);
             state.setUserId(userId);
+            state.setAddress(address);
             stateRepository.save(state);
 
         } catch(Exception e){

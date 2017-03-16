@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.transbot.model.State;
+import org.transbot.repository.StateRepository;
 import org.transbot.service.MessageConverterService;
 import retrofit2.Response;
 
@@ -30,13 +32,16 @@ public class WebhookController {
 	@Autowired
 	private MessageConverterService messageConverterService;
 
+	@Autowired
+	private StateRepository stateRepository;
+
 	@RequestMapping("/")
 	public void  test(){
 //		String to=event.getSource().getUserId();
 
 		String to = "U3df0ca20b02fa0e3583b6b59fe29990e";
 		try {
-			String value= messageConverterService.convertMessageToRoute(to,"binus-mangga dua mall");
+			String value= messageConverterService.convertMessageToRoute(to,"5-6");
 			Message message = new TextMessage(value);
 			PushMessage pushMessage = new PushMessage(to, message);
 			lineMessagingClient.pushMessage(pushMessage);
